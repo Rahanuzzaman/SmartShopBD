@@ -14,6 +14,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Create Android project folders
+        run: |
+          mkdir -p app/src/main/java/com/smartshopbd/app
+          mkdir -p app/src/main/java/com/smartshopbd/app/data
+          mkdir -p app/src/main/res/xml
+
+          mv AndroidManifest.xml app/src/main/AndroidManifest.xml
+          mv MainActivity.kt app/src/main/java/com/smartshopbd/app/MainActivity.kt
+          mv ShopViewModel.kt app/src/main/java/com/smartshopbd/app/ShopViewModel.kt
+          mv ShopDatabase.kt app/src/main/java/com/smartshopbd/app/data/ShopDatabase.kt
+          mv file_paths.xml app/src/main/res/xml/file_paths.xml
+
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
