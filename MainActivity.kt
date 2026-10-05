@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -39,6 +40,7 @@ private val Pale = Color(0xFFF4F7FA)
 private val Muted = Color(0xFF65758B)
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
 
@@ -60,7 +62,6 @@ fun SmartShopApp() {
     val products by vm.products.collectAsState(initial = emptyList())
     val customers by vm.customers.collectAsState(initial = emptyList())
     val sales by vm.sales.collectAsState(initial = emptyList())
-    val expenses by vm.expenses.collectAsState(initial = emptyList())
 
     val totalSales by vm.totalSales.collectAsState(initial = 0.0)
     val due by vm.totalSalesDue.collectAsState(initial = 0.0)
@@ -87,7 +88,6 @@ fun SmartShopApp() {
             topBar = {
 
                 TopAppBar(
-
                     title = {
 
                         Column {
@@ -173,15 +173,19 @@ fun SmartShopApp() {
                             p = profit,
                             ps = products,
                             cs = customers,
+
                             onSale = {
                                 tab = "বিক্রয়"
                             },
+
                             onProduct = {
                                 dialog = "product"
                             },
+
                             onDue = {
                                 tab = "কাস্টমার"
                             },
+
                             onExpense = {
                                 dialog = "expense"
                             }
@@ -213,11 +217,14 @@ fun SmartShopApp() {
 
                         CustomersScreen(
                             cs = customers,
+
                             add = {
                                 dialog = "customer"
                             },
+
                             onDue = { customer ->
-                                dialog = "due:${customer.id}"
+                                dialog =
+                                    "due:${customer.id}"
                             }
                         )
                     }
@@ -334,6 +341,7 @@ fun SmartShopApp() {
                     ) { cart, customer, discount, paid, payment ->
 
                         vm.checkout(
+
                             cart,
                             customer,
                             discount,
@@ -372,10 +380,13 @@ fun SmartShopApp() {
                         if (customer != null) {
 
                             DueDialog(
+
                                 c = customer,
+
                                 close = {
                                     dialog = null
                                 }
+
                             ) { amount, note ->
 
                                 vm.collectDue(
@@ -724,6 +735,7 @@ fun Quick(
                 containerColor =
                     Color.White
             )
+
     ) {
 
         Column(
@@ -869,6 +881,7 @@ fun ProductsScreen(
 
                     shape =
                         RoundedCornerShape(14.dp)
+
                 ) {
 
                     Row(
@@ -879,6 +892,7 @@ fun ProductsScreen(
 
                         verticalAlignment =
                             Alignment.CenterVertically
+
                     ) {
 
                         Column(
@@ -910,6 +924,7 @@ fun ProductsScreen(
 
                         Text(
                             "${p.stock}টি",
+
                             fontWeight =
                                 FontWeight.Bold,
 
@@ -1075,6 +1090,7 @@ fun ReportsScreen(
 
         verticalArrangement =
             Arrangement.spacedBy(10.dp)
+
     ) {
 
         item {
@@ -1224,8 +1240,11 @@ fun ProductDialog(
     }
 
     FormDialog(
+
         title = "পণ্য যোগ",
+
         close = close,
+
         save = {
 
             if (n.isNotBlank()) {
@@ -1239,6 +1258,7 @@ fun ProductDialog(
                 )
             }
         }
+
     ) {
 
         Field(
@@ -1299,14 +1319,18 @@ fun CustomerDialog(
     }
 
     FormDialog(
+
         title = "কাস্টমার যোগ",
+
         close = close,
+
         save = {
 
             if (n.isNotBlank()) {
                 add(n, p)
             }
         }
+
     ) {
 
         Field(
@@ -1344,8 +1368,11 @@ fun ExpenseDialog(
     }
 
     FormDialog(
+
         title = "খরচ যোগ",
+
         close = close,
+
         save = {
 
             val amount =
@@ -1363,6 +1390,7 @@ fun ExpenseDialog(
                 )
             }
         }
+
     ) {
 
         Field(
@@ -1401,8 +1429,11 @@ fun DueDialog(
     }
 
     FormDialog(
+
         title = "বাকি পরিশোধ: ${c.name}",
+
         close = close,
+
         save = {
 
             val x =
@@ -1412,6 +1443,7 @@ fun DueDialog(
                 pay(x, n)
             }
         }
+
     ) {
 
         Text(
@@ -1554,19 +1586,20 @@ fun SaleDialog(
                 )
 
                 val filtered =
-                    ps.filter {
+                    ps
+                        .filter {
 
-                        it.name.contains(
-                            search,
-                            true
-                        ) ||
+                            it.name.contains(
+                                search,
+                                true
+                            ) ||
 
-                        it.barcode.contains(
-                            search,
-                            true
-                        )
-
-                    }.take(5)
+                            it.barcode.contains(
+                                search,
+                                true
+                            )
+                        }
+                        .take(5)
 
                 LazyColumn(
                     Modifier.heightIn(
@@ -1574,9 +1607,7 @@ fun SaleDialog(
                     )
                 ) {
 
-                    items(
-                        filtered
-                    ) { p ->
+                    items(filtered) { p ->
 
                         Text(
 
@@ -1612,6 +1643,7 @@ fun SaleDialog(
                                                 ) {
 
                                                     it.copy(
+
                                                         quantity =
                                                             (
                                                                 it.quantity + 1
@@ -1639,6 +1671,7 @@ fun SaleDialog(
 
                         verticalAlignment =
                             Alignment.CenterVertically
+
                     ) {
 
                         Text(
