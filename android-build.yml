@@ -19,6 +19,7 @@ jobs:
           mkdir -p app/src/main/java/com/smartshopbd/app
           mkdir -p app/src/main/java/com/smartshopbd/app/data
           mkdir -p app/src/main/res/xml
+          mkdir -p app/src/main/res/drawable
 
           mv build.gradle.kts app/build.gradle.kts
           mv AndroidManifest.xml app/src/main/AndroidManifest.xml
@@ -27,7 +28,11 @@ jobs:
           mv ShopDatabase.kt app/src/main/java/com/smartshopbd/app/data/ShopDatabase.kt
           mv file_paths.xml app/src/main/res/xml/file_paths.xml
 
+          cp app_logo.png app/src/main/res/drawable/app_logo.png
+
           sed -i 's/ version "[^"]*"//' app/build.gradle.kts
+
+          sed -i 's/<application /<application android:icon="@drawable\/app_logo" android:roundIcon="@drawable\/app_logo" /' app/src/main/AndroidManifest.xml
 
           cat > build.gradle.kts <<'EOF'
           plugins {
