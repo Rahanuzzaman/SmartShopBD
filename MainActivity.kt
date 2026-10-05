@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.io.File
@@ -478,41 +479,127 @@ fun Dashboard(
     onExpense: () -> Unit
 ) {
 
-    LazyColumn(
+    val lowStock = ps.filter { it.stock < 10 }
 
+    LazyColumn(
         Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(horizontal = 14.dp),
 
-        verticalArrangement =
-            Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
 
-        contentPadding =
-            PaddingValues(bottom = 24.dp)
-
+        contentPadding = PaddingValues(
+            top = 14.dp,
+            bottom = 28.dp
+        )
     ) {
 
         item {
 
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Ink
+                )
+            ) {
+
+                Column(
+                    Modifier.padding(20.dp)
+                ) {
+
+                    Text(
+                        "আসসালামু আলাইকুম 👋",
+                        color = Color.White,
+                        fontSize = 14.sp
+                    )
+
+                    Spacer(
+                        Modifier.height(5.dp)
+                    )
+
+                    Text(
+                        "SmartShopBD",
+                        color = Color.White,
+                        fontSize = 27.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+
+                    Text(
+                        "আপনার দোকান, আপনার হিসাব",
+                        color = Color(0xFFD7E3F4),
+                        fontSize = 13.sp
+                    )
+
+                    Spacer(
+                        Modifier.height(16.dp)
+                    )
+
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        Column(
+                            Modifier.weight(1f)
+                        ) {
+
+                            Text(
+                                "আজকের ব্যবসা",
+                                color = Color(0xFFB8C7DA),
+                                fontSize = 11.sp
+                            )
+
+                            Text(
+                                "এক নজরে সবকিছু",
+                                color = Color.White,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+
+                        Surface(
+                            shape = RoundedCornerShape(14.dp),
+                            color = Color(0xFF24446D)
+                        ) {
+
+                            Text(
+                                "LIVE",
+                                modifier = Modifier.padding(
+                                    horizontal = 12.dp,
+                                    vertical = 7.dp
+                                ),
+                                color = Color(0xFF7EF0B8),
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        item {
+
             Text(
-                "আসসালামু আলাইকুম 👋",
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
+                "ব্যবসার সারাংশ",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.ExtraBold,
                 color = Ink
             )
 
             Text(
-                "দোকানের হিসাব এক নজরে",
-                color = Muted,
-                fontSize = 13.sp
+                "আপনার দোকানের বর্তমান হিসাব",
+                fontSize = 12.sp,
+                color = Muted
             )
         }
 
         item {
 
             Row(
-                horizontalArrangement =
-                    Arrangement.spacedBy(10.dp)
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
 
                 Stat(
@@ -536,8 +623,8 @@ fun Dashboard(
         item {
 
             Row(
-                horizontalArrangement =
-                    Arrangement.spacedBy(10.dp)
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
 
                 Stat(
@@ -552,7 +639,7 @@ fun Dashboard(
                     "খরচ",
                     "৳${money(e)}",
                     Icons.Default.Payments,
-                    Color(0xFFB45309),
+                    Color(0xFFEA580C),
                     Modifier.weight(1f)
                 )
             }
@@ -562,20 +649,25 @@ fun Dashboard(
 
             Text(
                 "দ্রুত কাজ",
-                fontSize = 17.sp,
-                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.ExtraBold,
                 color = Ink
             )
 
+            Spacer(
+                Modifier.height(8.dp)
+            )
+
             Row(
-                horizontalArrangement =
-                    Arrangement.spacedBy(8.dp)
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
 
                 Quick(
                     "নতুন বিক্রি",
                     Icons.Default.PointOfSale,
                     onSale,
+                    Green,
                     Modifier.weight(1f)
                 )
 
@@ -583,13 +675,25 @@ fun Dashboard(
                     "পণ্য যোগ",
                     Icons.Default.AddBox,
                     onProduct,
+                    Color(0xFF2563EB),
                     Modifier.weight(1f)
                 )
+            }
+
+            Spacer(
+                Modifier.height(10.dp)
+            )
+
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
 
                 Quick(
                     "বাকি",
                     Icons.Default.MenuBook,
                     onDue,
+                    Color(0xFF7C3AED),
                     Modifier.weight(1f)
                 )
 
@@ -597,6 +701,7 @@ fun Dashboard(
                     "খরচ",
                     Icons.Default.ReceiptLong,
                     onExpense,
+                    Color(0xFFEA580C),
                     Modifier.weight(1f)
                 )
             }
@@ -604,57 +709,164 @@ fun Dashboard(
 
         item {
 
-            Text(
-                "স্টক সতর্কতা",
-                fontSize = 17.sp,
-                fontWeight = FontWeight.Bold,
-                color = Ink
-            )
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White
+                )
+            ) {
 
-            ps
-                .filter {
-                    it.stock < 10
-                }
-                .forEach {
+                Column(
+                    Modifier.padding(16.dp)
+                ) {
 
-                    Card(
-
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 3.dp),
-
-                        colors =
-                            CardDefaults.cardColors(
-                                containerColor =
-                                    Color.White
-                            )
-
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
 
-                        Row(
-                            Modifier.padding(12.dp),
-                            verticalAlignment =
-                                Alignment.CenterVertically
+                        Surface(
+                            shape = RoundedCornerShape(12.dp),
+                            color = if (lowStock.isNotEmpty()) {
+                                Color(0xFFFFF1E8)
+                            } else {
+                                Color(0xFFE8F8F1)
+                            }
                         ) {
 
                             Icon(
-                                Icons.Default.WarningAmber,
-                                null,
-                                tint =
-                                    Color(0xFFB45309)
+                                if (lowStock.isNotEmpty()) {
+                                    Icons.Default.WarningAmber
+                                } else {
+                                    Icons.Default.CheckCircle
+                                },
+                                contentDescription = null,
+                                modifier = Modifier.padding(9.dp),
+                                tint = if (lowStock.isNotEmpty()) {
+                                    Color(0xFFEA580C)
+                                } else {
+                                    Green
+                                }
                             )
+                        }
 
-                            Spacer(
-                                Modifier.width(8.dp)
+                        Spacer(
+                            Modifier.width(12.dp)
+                        )
+
+                        Column(
+                            Modifier.weight(1f)
+                        ) {
+
+                            Text(
+                                "স্টক স্ট্যাটাস",
+                                fontWeight = FontWeight.Bold,
+                                color = Ink
                             )
 
                             Text(
-                                "${it.name} — ${it.stock}টি বাকি",
-                                color = Ink
+                                if (lowStock.isNotEmpty()) {
+                                    "${lowStock.size}টি পণ্যের স্টক কম"
+                                } else {
+                                    "সব পণ্যের স্টক স্বাভাবিক আছে"
+                                },
+                                fontSize = 12.sp,
+                                color = Muted
                             )
                         }
                     }
+
+                    if (lowStock.isNotEmpty()) {
+
+                        Spacer(
+                            Modifier.height(12.dp)
+                        )
+
+                        lowStock.take(3).forEach { product ->
+
+                            Row(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 5.dp),
+
+                                verticalAlignment =
+                                    Alignment.CenterVertically
+                            ) {
+
+                                Text(
+                                    product.name,
+                                    Modifier.weight(1f),
+                                    fontSize = 13.sp,
+                                    color = Ink
+                                )
+
+                                Surface(
+                                    shape = RoundedCornerShape(8.dp),
+                                    color = Color(0xFFFFF1E8)
+                                ) {
+
+                                    Text(
+                                        "${product.stock}টি",
+                                        modifier = Modifier.padding(
+                                            horizontal = 9.dp,
+                                            vertical = 5.dp
+                                        ),
+                                        color = Color(0xFFEA580C),
+                                        fontSize = 11.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
+            }
+        }
+
+        item {
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color(0xFFEFF4FA)
+                )
+            ) {
+
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(18.dp),
+
+                    horizontalAlignment =
+                        Alignment.CenterHorizontally
+                ) {
+
+                    Text(
+                        "SmartShopBD",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Ink
+                    )
+
+                    Text(
+                        "Smart business • Simple হিসাব • Better control",
+                        fontSize = 11.sp,
+                        color = Muted,
+                        textAlign = TextAlign.Center
+                    )
+
+                    Spacer(
+                        Modifier.height(5.dp)
+                    )
+
+                    Text(
+                        "Powered By Rahanuzzaman Monir",
+                        fontSize = 10.sp,
+                        color = Color(0xFF49647F)
+                    )
+                }
+            }
         }
     }
 }
@@ -669,39 +881,45 @@ fun Stat(
 ) {
 
     Card(
-
         m,
-
-        shape =
-            RoundedCornerShape(16.dp),
-
-        colors =
-            CardDefaults.cardColors(
-                containerColor =
-                    Color.White
-            )
-
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        )
     ) {
 
         Column(
-            Modifier.padding(14.dp)
+            Modifier.padding(16.dp)
         ) {
 
-            Icon(
-                i,
-                null,
-                tint = c
-            )
+            Row(
+                Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Surface(
+                    shape = RoundedCornerShape(11.dp),
+                    color = c.copy(alpha = 0.10f)
+                ) {
+
+                    Icon(
+                        i,
+                        contentDescription = null,
+                        modifier = Modifier.padding(8.dp),
+                        tint = c
+                    )
+                }
+            }
 
             Spacer(
-                Modifier.height(8.dp)
+                Modifier.height(12.dp)
             )
 
             Text(
                 v,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Ink
+                fontSize = 21.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = c
             )
 
             Text(
@@ -718,42 +936,54 @@ fun Quick(
     t: String,
     i: androidx.compose.ui.graphics.vector.ImageVector,
     on: () -> Unit,
+    c: Color,
     m: Modifier
 ) {
 
     Card(
-
         m.clickable {
             on()
         },
 
-        shape =
-            RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(20.dp),
 
-        colors =
-            CardDefaults.cardColors(
-                containerColor =
-                    Color.White
-            )
-
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        )
     ) {
 
         Column(
-            Modifier.padding(12.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+
             horizontalAlignment =
                 Alignment.CenterHorizontally
         ) {
 
-            Icon(
-                i,
-                null,
-                tint = Green
+            Surface(
+                shape = RoundedCornerShape(14.dp),
+                color = c.copy(alpha = 0.10f)
+            ) {
+
+                Icon(
+                    i,
+                    contentDescription = null,
+                    modifier = Modifier.padding(11.dp),
+                    tint = c
+                )
+            }
+
+            Spacer(
+                Modifier.height(8.dp)
             )
 
             Text(
                 t,
-                fontSize = 11.sp,
-                color = Ink
+                fontSize = 12.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = c,
+                textAlign = TextAlign.Center
             )
         }
     }
