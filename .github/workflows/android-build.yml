@@ -14,6 +14,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Create Android project structure
+        run: |
+          mkdir -p app/src/main/java/com/smartshopbd/app
+          mkdir -p app/src/main/java/com/smartshopbd/app/data
+          mkdir -p app/src/main/res/xml
+
+          mv build.gradle.kts app/build.gradle.kts
+          mv AndroidManifest.xml app/src/main/AndroidManifest.xml
+          mv MainActivity.kt app/src/main/java/com/smartshopbd/app/MainActivity.kt
+          mv ShopViewModel.kt app/src/main/java/com/smartshopbd/app/ShopViewModel.kt
+          mv ShopDatabase.kt app/src/main/java/com/smartshopbd/app/data/ShopDatabase.kt
+          mv file_paths.xml app/src/main/res/xml/file_paths.xml
+
+          sed -i 's/ version "[^"]*"//' app/build.gradle.kts
+
+          cat > build.gradle.kts <<'EOF'
+          plugins {
+              id("com.android.application") version "8.7.3" apply false
+              id("org.jetbrains.kotlin.android") version "2.0.21" apply false
+              id("org.jetbrains.kotlin.plugin.compose") version "2.0.21" apply false
+              id("com.google.devtools.ksp") version "2.0.21-1.0.28" apply false
+          }
+          EOF
+
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
@@ -26,10 +50,10 @@ jobs:
           gradle-version: '8.9'
 
       - name: Build APK
-        run: gradle assembleDebug --no-daemon
+        run: gradle :app:assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
-          path: '**/build/outputs/apk/debug/*.apk'
+          path: 'app/build/outputs/apk/debug/*.apk'
